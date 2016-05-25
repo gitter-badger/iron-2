@@ -16,7 +16,7 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include <lexer.h>
+#include "lexer.h"
 
 enum Token
 {
@@ -29,20 +29,21 @@ enum Token
     token_requires = -5,
 
     // Defining functions
-    // token_function = -4,
+    token_function = -6,
+    token_extern = -7,
 
     // Variable assignment
     // token_size = -5,
     // token_type = -6,
-    // token_identifier = -7,
-    // token_assignment = -8,
+    // token_assignment = -7,
 
     // Primitive data types
-    token_boolean = -9,
-    // token_small_signed_integer = -10,
+    token_boolean = -8,
+    token_number = -9,
 };
 
 static std::string identifier;
+static double numericValue;
 static bool boolean;
 
 static int getToken()
@@ -63,6 +64,12 @@ static int getToken()
             return token_package;
         if (identifier == "requires")
             return token_requires;
+        if (identifier == "function")
+            return token_function;
+        if (identifier == "extern")
+            return token_extern;
+        if (identifier == "package")
+            return token_package;
         if (identifier == "boolean")
             return token_boolean;
         return token_identifier;
@@ -75,6 +82,8 @@ static int getToken()
             number += lastChar;
             lastChat = getchar();
         } while (isdigit(lastChar) || lastChar == '.');
+        numericValue = strtod(number.c_str(), 0);
+        return token_number;
     }
 
     if (lastChar == '%')
