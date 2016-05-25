@@ -19,4 +19,6 @@
 #ifndef IRON_LEXER_H
 #define IRON_LEXER_H
 
+static int getToken();
+
 #endif //IRON_LEXER_H
