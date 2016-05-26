@@ -6,8 +6,8 @@
 
 **Iron** (abbreviated **Fe**) is a general-purpose programming language, on which development started in 2016.
 It is designed to be both flexible and readable; approachable for individuals who come from vastly different
-backgrounds. It draws inspiration from many other popular languages, most notably from Python, JavaScript, C++,
-and SystemVerilog.
+backgrounds. It draws inspiration from many other popular languages, most notably from Python, JavaScript, and C++.
+It is built on the LLVM compiler architecture.
 
 ## Progress
 
