@@ -11,8 +11,17 @@ and SystemVerilog.
 
 ## Progress
 
-- [x] Initial lexer implementation
-- [ ] Initial parser implementation
+### Lexer
+
+- [x] Initial implementation
+- [ ] Extending features
+- [ ] Code optimization
+
+### Parser
+
+- [ ] Initial implementation
+- [ ] Extending features
+- [ ] Code optimization
 
 ## Getting Started
 
