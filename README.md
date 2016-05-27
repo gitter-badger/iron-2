@@ -1,4 +1,4 @@
-<img src="http://i.imgur.com/i98eIOL.png" width="150px">
+<img src="http://i.imgur.com/kOh696Y.png" width="150px">
 
 # The Iron Programming Language
 
