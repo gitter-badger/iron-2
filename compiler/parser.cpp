@@ -18,9 +18,41 @@
 
 #include "parser.h"
 
+using namespace std;
+
 class ExpressionAST {
 public:
     virtual ~ExpressionAST() {}
+};
+
+// Expression class for a variable
+class VariableAST : public ExpressionAST {
+    std::string name;
+public:
+    VariableAST(const std::string $name) : name(name) {}
+};
+
+// Expression class for a binary operator
+class BinaryOperatorAST : public ExpressionAST {
+    char op;
+    std::unique_ptr<ExpressionAST> LHS, RHS;
+public:
+    BinaryOperatorAST(
+        char op,
+        std::unique_ptr<ExpressionAST> LHS,
+        std::unique_ptr<ExpressionAST> RHS) :
+        op(op), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
+};
+
+// Expression class for a function call
+class FunctionCallAST : public ExpressionAST {
+    std::string caller;
+    std::vector<std::unique_ptr<ExpressionAST>> arguments;
+public:
+    FunctionCallAST(
+        const std::string caller,
+        std::vector<std::unique_ptr<ExpressionAST>> arguments) :
+        caller(caller), arguments(std::move(arguments)) {}
 };
 
 // Expression class for a number
@@ -29,4 +61,3 @@ class NumberAST : public ExpressionAST {
 public:
     NumberAST(double value) : value(value) {}
 };
-
