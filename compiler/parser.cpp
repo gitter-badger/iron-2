@@ -25,14 +25,14 @@ public:
     virtual ~ExpressionAST() {}
 };
 
-// Expression class for a variable
+// Variable
 class VariableAST : public ExpressionAST {
     std::string name;
 public:
     VariableAST(const std::string $name) : name(name) {}
 };
 
-// Expression class for a binary operator
+// Binary operator
 class BinaryOperatorAST : public ExpressionAST {
     char op;
     std::unique_ptr<ExpressionAST> LHS, RHS;
@@ -44,18 +44,40 @@ public:
         op(op), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
 };
 
-// Expression class for a function call
+// Function call
 class FunctionCallAST : public ExpressionAST {
     std::string caller;
     std::vector<std::unique_ptr<ExpressionAST>> arguments;
 public:
     FunctionCallAST(
-        const std::string caller,
+        const std::string callee,
         std::vector<std::unique_ptr<ExpressionAST>> arguments) :
-        caller(caller), arguments(std::move(arguments)) {}
+        callee(callee), arguments(std::move(arguments)) {}
 };
 
-// Expression class for a number
+// Function prototype
+class PrototypeAST {
+    std::string name;
+    std::vector<std::string> arguments;
+public:
+    PrototypeAST(
+        const std::string name,
+        std::vector<std::string> arguments) :
+        name(name), arguments(std::move(arguments)) {}
+};
+
+// The actual function definition itself
+class FunctionAST {
+    std::unique_ptr<PrototypeAST> prototype;
+    std::unique_ptr<ExpressionAST> body;
+public:
+    FunctionAST(
+        std::unique_ptr<PrototypeAST> prototype,
+        std::unique_ptr<ExpressionAST> body) :
+        prototype(std::move(prototype)), body(std::move(body)) {}
+};
+
+// Number
 class NumberAST : public ExpressionAST {
     double value;
 public:
