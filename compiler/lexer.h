@@ -19,6 +19,25 @@
 #ifndef IRON_LEXER_H
 #define IRON_LEXER_H
 
-static int getToken();
+class IronLexer {
+private:
+    std::string identifier;
+    double numericValue;
+    bool booleanValue;
+    enum Token
+    {
+        token_eof        = -1,
+        token_identifier = -2,
+        token_extern     = -3,
+        token_package    = -4,
+        token_requires   = -5,
+        token_function   = -6,
+        token_boolean    = -7,
+        token_number     = -8,
+    };
+public:
+    IronLexer();
+    int getToken();
+};
 
 #endif //IRON_LEXER_H

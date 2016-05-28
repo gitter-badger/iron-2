@@ -16,7 +16,16 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
+#include <map>
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "parser.h"
+#include "lexer.h"
 
 using namespace std;
 
@@ -47,11 +56,11 @@ public:
 // Function call
 class FunctionCallAST : public ExpressionAST {
     std::string caller;
-    std::vector<std::unique_ptr<ExpressionAST>> arguments;
+    std::vector<std::unique_ptr<ExpressionAST> > arguments;
 public:
     FunctionCallAST(
         const std::string callee,
-        std::vector<std::unique_ptr<ExpressionAST>> arguments) :
+        std::vector<std::unique_ptr<ExpressionAST> > arguments) :
         callee(callee), arguments(std::move(arguments)) {}
 };
 
@@ -83,3 +92,10 @@ class NumberAST : public ExpressionAST {
 public:
     NumberAST(double value) : value(value) {}
 };
+
+IronLexer lexer;
+
+static int currentToken;
+static int getNextToken() {
+//    return currentToken = lexer::getToken();
+}

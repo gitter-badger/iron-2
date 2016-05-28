@@ -16,37 +16,12 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+#include <cstdlib>
+#include <string>
+
 #include "lexer.h"
 
-enum Token
-{
-    token_eof = -1,
-    token_identifier = -2,
-    token_extern = -3,
-
-    // Setting up a package
-    token_package = -4,
-    token_requires = -5,
-
-    // Defining functions
-    token_function = -6,
-    token_extern = -7,
-
-    // Variable assignment
-    // token_size = -5,
-    // token_type = -6,
-    // token_assignment = -7,
-
-    // Primitive data types
-    token_boolean = -8,
-    token_number = -9,
-};
-
-static std::string identifier;
-static double numericValue;
-static bool boolean;
-
-static int getToken()
+int IronLexer::getToken()
 {
     static int lastChar = ' ';
 
@@ -80,7 +55,7 @@ static int getToken()
         std::string number;
         do {
             number += lastChar;
-            lastChat = getchar();
+            lastChar = getchar();
         } while (isdigit(lastChar) || lastChar == '.');
         numericValue = strtod(number.c_str(), 0);
         return token_number;
