@@ -67,7 +67,7 @@ class PrototypeAST {
     std::vector<std::string> m_arguments;
 public:
     PrototypeAST(
-            const std::string name,
+            const std::string &name,
             std::vector<std::string> arguments) :
             m_name(name), m_arguments(std::move(arguments)) {}
 };
