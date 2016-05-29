@@ -26,13 +26,6 @@
 #include <string>
 #include <vector>
 
-class IronParser {
-private:
-    int currentToken;
-public:
-    int getNextToken();
-};
-
 class ExpressionAST {
 public:
     virtual ~ExpressionAST() {}
@@ -97,5 +90,23 @@ public:
     NumberAST(double value) : m_value(value) {}
 };
 
+class IronParser {
+private:
+    int currentToken;
+    int getNextToken();
+public:
+    int getTokenPrecedence();
+    std::map<char, int> operatorPrecedence;
+    std::unique_ptr<ExpressionAST> ErrorHandler(const char *string);
+    std::unique_ptr<PrototypeAST> ErrorHandlerP(const char *string);
+    std::unique_ptr<ExpressionAST> ParseNumber();
+    std::unique_ptr<ExpressionAST> ParseParenthesis();
+    std::unique_ptr<ExpressionAST> ParseIdentifier();
+    std::unique_ptr<ExpressionAST> ParsePrimary();
+    std::unique_ptr<PrototypeAST> ParsePrototype();
+    std::unique_ptr<ExpressionAST> ParseExpression();
+    std::unique_ptr<ExpressionAST> ParseOperationRHS(int precedence,
+                                                     std::unique_ptr<ExpressionAST> LHS);
+};
 
 #endif //IRON_LANG_PARSER_H

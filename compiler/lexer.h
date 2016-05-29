@@ -24,7 +24,9 @@
 #include <string>
 
 class IronLexer {
-private:
+public:
+    IronLexer();
+    int getToken();
     std::string identifier;
     double numericValue;
     bool booleanValue;
@@ -39,9 +41,6 @@ private:
         token_boolean    = -7,
         token_number     = -8,
     };
-public:
-    IronLexer();
-    int getToken();
 };
 
 #endif //IRON_LANG_LEXER_H
