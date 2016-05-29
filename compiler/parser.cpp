@@ -48,9 +48,9 @@ std::unique_ptr<PrototypeAST> IronParser::ErrorHandlerP(const char *string) {
 }
 
 std::unique_ptr<ExpressionAST> IronParser::ParseNumber() {
-    auto result = llvm::make_unique<NumberAST>(lexer.numericValue);
-    this->getNextToken();
-    return std::move(result);
+//    auto result = llvm::make_unique<NumberAST>(lexer.numericValue);
+//    this->getNextToken();
+//    return std::move(result);
 }
 
 std::unique_ptr<ExpressionAST> IronParser::ParseParenthesis() {
@@ -65,9 +65,9 @@ std::unique_ptr<ExpressionAST> IronParser::ParseParenthesis() {
 
 std::unique_ptr<ExpressionAST> IronParser::ParseIdentifier() {
     std::string identifier = lexer.identifier;
-    this->getNextToken();
-    if (this->currentToken != '(')
-        return llvm::make_unique<VariableAST>(identifier);
+//    this->getNextToken();
+//    if (this->currentToken != '(')
+//        return llvm::make_unique<VariableAST>(identifier);
     this->getNextToken();
     std::vector<std::unique_ptr<ExpressionAST>> arguments;
     if (this->currentToken != ')') {
@@ -85,7 +85,7 @@ std::unique_ptr<ExpressionAST> IronParser::ParseIdentifier() {
     }
 
     this->getNextToken();
-    return llvm::make_unique<FunctionCallAST>(identifier, std::move(arguments));
+//    return llvm::make_unique<FunctionCallAST>(identifier, std::move(arguments));
 }
 
 std::unique_ptr<ExpressionAST> IronParser::ParsePrimary() {
@@ -162,15 +162,15 @@ std::unique_ptr<PrototypeAST> IronParser::ParsePrototype() {
         return ErrorHandlerP("Expected ')' in prototype");
 
     this->getNextToken();
-    return llvm::make_unique<PrototypeAST>(functionName, std::move(argumentNames));
+//    return llvm::make_unique<PrototypeAST>(functionName, std::move(argumentNames));
 }
 
 std::unique_ptr<FunctionAST> IronParser::ParseDefinition() {
     this->getNextToken();
     auto prototype = this->ParsePrototype();
     if (!prototype) return nullptr;
-    if (auto e = this->ParseExpression())
-        return llvm::make_unique<FunctionAST>(std::move(prototype), std::move(e));
+//    if (auto e = this->ParseExpression())
+//        return llvm::make_unique<FunctionAST>(std::move(prototype), std::move(e));
     return nullptr;
 }
 
@@ -181,8 +181,8 @@ std::unique_ptr<PrototypeAST> IronParser::ParseExtern() {
 
 std::unique_ptr<FunctionAST> IronParser::ParseTLE() {
     if (auto e = this->ParseExpression()) {
-        auto prototype = llvm::make_unique<PrototypeAST>("", std::vector<std::string>());
-        return llvm::make_unique<FunctionAST>(std::move(prototype), std::move(e));
+//        auto prototype = llvm::make_unique<PrototypeAST>("", std::vector<std::string>());
+//        return llvm::make_unique<FunctionAST>(std::move(prototype), std::move(e));
     }
     return nullptr;
 }
