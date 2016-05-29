@@ -1,6 +1,6 @@
 <img src="http://i.imgur.com/kOh696Y.png" width="150px">
 
-# The Iron Programming Language
+# The Iron Programming Language [![Build Status](https://travis-ci.org/IronLang/iron.svg?branch=master)](https://travis-ci.org/IronLang/iron)
 
 > **NOTE:** Iron is under active development, not production-ready in any sense. If you try to download this in an attempt to write software, you're gonna have a bad time. For more information, see the Progress section below.
 
