@@ -31,6 +31,13 @@ public:
     virtual ~ExpressionAST() {}
 };
 
+// Number
+class NumberAST : public ExpressionAST {
+    double m_value;
+public:
+    NumberAST(double value) : m_value(value) {}
+};
+
 // Variable
 class VariableAST : public ExpressionAST {
     std::string m_name;
@@ -81,13 +88,6 @@ public:
             std::unique_ptr<PrototypeAST> prototype,
             std::unique_ptr<ExpressionAST> body) :
             m_prototype(std::move(prototype)), m_body(std::move(body)) {}
-};
-
-// Number
-class NumberAST : public ExpressionAST {
-    double m_value;
-public:
-    NumberAST(double value) : m_value(value) {}
 };
 
 class IronParser {
