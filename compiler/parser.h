@@ -93,9 +93,13 @@ public:
 class IronParser {
 private:
     int currentToken;
-    int getNextToken();
 public:
+    void Dispatch();
+    void HandleDefinition();
+    void HandleExtern();
+    void HandleTLE();
     int getTokenPrecedence();
+    int getNextToken();
     std::map<char, int> operatorPrecedence;
     std::unique_ptr<ExpressionAST> ErrorHandler(const char *string);
     std::unique_ptr<PrototypeAST> ErrorHandlerP(const char *string);
@@ -104,6 +108,9 @@ public:
     std::unique_ptr<ExpressionAST> ParseIdentifier();
     std::unique_ptr<ExpressionAST> ParsePrimary();
     std::unique_ptr<PrototypeAST> ParsePrototype();
+    std::unique_ptr<FunctionAST> ParseDefinition();
+    std::unique_ptr<PrototypeAST> ParseExtern();
+    std::unique_ptr<FunctionAST> ParseTLE();
     std::unique_ptr<ExpressionAST> ParseExpression();
     std::unique_ptr<ExpressionAST> ParseOperationRHS(int precedence,
                                                      std::unique_ptr<ExpressionAST> LHS);

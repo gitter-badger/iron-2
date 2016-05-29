@@ -19,6 +19,18 @@
 #include "lexer.h"
 #include "parser.h"
 
+namespace helper {
+// Cloning make_unique here until it's standard in C++14.
+// Using a namespace to avoid conflicting with MSVC's std::make_unique (which
+// ADL can sometimes find in unqualified calls).
+    template <class T, class... Args>
+    static
+    typename std::enable_if<!std::is_array<T>::value, std::unique_ptr<T>>::type
+    make_unique(Args &&... args) {
+        return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+    }
+} // end namespace helper
+
 IronLexer lexer;
 
 int IronParser::getNextToken() {
@@ -139,7 +151,90 @@ std::unique_ptr<PrototypeAST> IronParser::ParsePrototype() {
     std::string functionName = lexer.identifier;
     this->getNextToken();
 
-    // COME BACK TO THIS
+    if (this->currentToken != '(')
+        return ErrorHandlerP("Expected '(' in prototype");
+
+    std::vector<std::string> argumentNames;
+    while (this->getNextToken() == IronLexer::token_identifier)
+        argumentNames.push_back(lexer.identifier);
+
+    if (this->currentToken != ')')
+        return ErrorHandlerP("Expected ')' in prototype");
+
+    this->getNextToken();
+    return llvm::make_unique<PrototypeAST>(functionName, std::move(argumentNames));
+}
+
+std::unique_ptr<FunctionAST> IronParser::ParseDefinition() {
+    this->getNextToken();
+    auto prototype = this->ParsePrototype();
+    if (!prototype) return nullptr;
+    if (auto e = this->ParseExpression())
+        return llvm::make_unique<FunctionAST>(std::move(prototype), std::move(e));
+    return nullptr;
+}
+
+std::unique_ptr<PrototypeAST> IronParser::ParseExtern() {
+    this->getNextToken();
+    return this->ParsePrototype();
+}
+
+std::unique_ptr<FunctionAST> IronParser::ParseTLE() {
+    if (auto e = this->ParseExpression()) {
+        auto prototype = llvm::make_unique<PrototypeAST>("", std::vector<std::string>());
+        return llvm::make_unique<FunctionAST>(std::move(prototype), std::move(e));
+    }
+    return nullptr;
+}
+
+void IronParser::HandleDefinition() {
+    if (this->ParseDefinition()) {
+        fprintf(stderr, "Parsed a function definition.\n");
+    } else {
+        // Skip token for error recovery.
+        this->getNextToken();
+    }
+}
+
+void IronParser::HandleExtern() {
+    if (this->ParseExtern()) {
+        fprintf(stderr, "Parsed an extern\n");
+    } else {
+        // Skip token for error recovery.
+        this->getNextToken();
+    }
+}
+
+void IronParser::HandleTLE() {
+    // Evaluate a top-level expression into an anonymous function.
+    if (this->ParseTLE()) {
+        fprintf(stderr, "Parsed a top-level expr\n");
+    } else {
+        // Skip token for error recovery.
+        this->getNextToken();
+    }
+}
+
+void IronParser::Dispatch() {
+    while(true) {
+        fprintf(stderr, "Forge > ");
+        switch (this->currentToken) {
+            case IronLexer::token_eof:
+                return;
+            case ';':
+                this->getNextToken();
+                break;
+            case IronLexer::token_function:
+                this->HandleDefinition();
+                break;
+            case IronLexer::token_extern:
+                this->HandleExtern();
+                break;
+            default:
+                this->HandleTLE();
+                break;
+        }
+    }
 }
 
 int main() {
@@ -148,4 +243,10 @@ int main() {
     parser.operatorPrecedence['+'] = 20;
     parser.operatorPrecedence['-'] = 20;
     parser.operatorPrecedence['*'] = 40;
+
+    fprintf(stderr, "Forge > ");
+    parser.getNextToken();
+    parser.Dispatch();
+
+    return 0;
 }
