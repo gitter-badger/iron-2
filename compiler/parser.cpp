@@ -27,75 +27,10 @@
 #include "parser.h"
 #include "lexer.h"
 
-using namespace std;
-
-class ExpressionAST {
-public:
-    virtual ~ExpressionAST() {}
-};
-
-// Variable
-class VariableAST : public ExpressionAST {
-    std::string name;
-public:
-    VariableAST(const std::string $name) : name(name) {}
-};
-
-// Binary operator
-class BinaryOperatorAST : public ExpressionAST {
-    char op;
-    std::unique_ptr<ExpressionAST> LHS, RHS;
-public:
-    BinaryOperatorAST(
-        char op,
-        std::unique_ptr<ExpressionAST> LHS,
-        std::unique_ptr<ExpressionAST> RHS) :
-        op(op), LHS(std::move(LHS)), RHS(std::move(RHS)) {}
-};
-
-// Function call
-class FunctionCallAST : public ExpressionAST {
-    std::string caller;
-    std::vector<std::unique_ptr<ExpressionAST> > arguments;
-public:
-    FunctionCallAST(
-        const std::string callee,
-        std::vector<std::unique_ptr<ExpressionAST> > arguments) :
-        callee(callee), arguments(std::move(arguments)) {}
-};
-
-// Function prototype
-class PrototypeAST {
-    std::string name;
-    std::vector<std::string> arguments;
-public:
-    PrototypeAST(
-        const std::string name,
-        std::vector<std::string> arguments) :
-        name(name), arguments(std::move(arguments)) {}
-};
-
-// The actual function definition itself
-class FunctionAST {
-    std::unique_ptr<PrototypeAST> prototype;
-    std::unique_ptr<ExpressionAST> body;
-public:
-    FunctionAST(
-        std::unique_ptr<PrototypeAST> prototype,
-        std::unique_ptr<ExpressionAST> body) :
-        prototype(std::move(prototype)), body(std::move(body)) {}
-};
-
-// Number
-class NumberAST : public ExpressionAST {
-    double value;
-public:
-    NumberAST(double value) : value(value) {}
-};
-
 IronLexer lexer;
+IronParser parser;
 
-static int currentToken;
-static int getNextToken() {
-//    return currentToken = lexer::getToken();
+int IronParser::getNextToken() {
+    return currentToken = lexer.getToken();
 }
+
