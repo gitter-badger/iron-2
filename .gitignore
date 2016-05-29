@@ -5,6 +5,7 @@
 /compiler/*.o
 
 # User-specific stuff:
+.idea/iron-lang.iml
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/dictionaries
@@ -45,3 +46,4 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+.idea/
