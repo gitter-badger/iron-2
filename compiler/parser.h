@@ -26,6 +26,8 @@
 #include <string>
 #include <vector>
 
+#include "lexer.h"
+
 class ExpressionAST {
 public:
     virtual ~ExpressionAST() {}
@@ -94,6 +96,7 @@ class IronParser {
 private:
     int currentToken;
 public:
+    IronLexer lexer;
     void Dispatch();
     void HandleDefinition();
     void HandleExtern();

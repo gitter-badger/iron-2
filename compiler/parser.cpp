@@ -16,7 +16,6 @@
 // WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#include "lexer.h"
 #include "parser.h"
 
 namespace helper {
@@ -31,10 +30,8 @@ namespace helper {
     }
 } // end namespace helper
 
-IronLexer lexer;
-
 int IronParser::getNextToken() {
-    return this->currentToken = lexer.getToken();
+    return this->currentToken = this->lexer.getToken();
 }
 
 std::unique_ptr<ExpressionAST> IronParser::ErrorHandler(const char *string) {
@@ -48,9 +45,9 @@ std::unique_ptr<PrototypeAST> IronParser::ErrorHandlerP(const char *string) {
 }
 
 std::unique_ptr<ExpressionAST> IronParser::ParseNumber() {
-    auto result = helper::make_unique<NumberAST>(lexer.numericValue);
+    auto result = helper::make_unique<NumberAST>(this->lexer.numericValue);
     this->getNextToken();
-    return std::move(result);
+    return std::move(result); // <NumberAST> not compatible with <ExpressionAST> ?
 }
 
 std::unique_ptr<ExpressionAST> IronParser::ParseParenthesis() {
@@ -64,7 +61,7 @@ std::unique_ptr<ExpressionAST> IronParser::ParseParenthesis() {
 }
 
 std::unique_ptr<ExpressionAST> IronParser::ParseIdentifier() {
-    std::string identifier = lexer.identifier;
+    std::string identifier = this->lexer.identifier;
     this->getNextToken();
     if (this->currentToken != '(')
         return helper::make_unique<VariableAST>(identifier);
@@ -90,14 +87,14 @@ std::unique_ptr<ExpressionAST> IronParser::ParseIdentifier() {
 
 std::unique_ptr<ExpressionAST> IronParser::ParsePrimary() {
     switch(this->currentToken) {
-        default:
-            return ErrorHandler("unknown token when expecting an expression");
         case IronLexer::token_identifier:
             return ParseIdentifier();
         case IronLexer::token_number:
             return ParseNumber();
         case '(':
             return ParseParenthesis();
+        default:
+            return ErrorHandler("unknown token when expecting an expression");
     }
 }
 
@@ -148,7 +145,7 @@ std::unique_ptr<PrototypeAST> IronParser::ParsePrototype() {
     if (this->currentToken != IronLexer::token_identifier)
         return ErrorHandlerP("Expected function name in prototype");
 
-    std::string functionName = lexer.identifier;
+    std::string functionName = this->lexer.identifier;
     this->getNextToken();
 
     if (this->currentToken != '(')
@@ -156,7 +153,7 @@ std::unique_ptr<PrototypeAST> IronParser::ParsePrototype() {
 
     std::vector<std::string> argumentNames;
     while (this->getNextToken() == IronLexer::token_identifier)
-        argumentNames.push_back(lexer.identifier);
+        argumentNames.push_back(this->lexer.identifier);
 
     if (this->currentToken != ')')
         return ErrorHandlerP("Expected ')' in prototype");
