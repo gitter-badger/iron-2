@@ -2,6 +2,8 @@
 
 # The Iron Programming Language [![Build Status](https://travis-ci.org/IronLang/iron.svg?branch=master)](https://travis-ci.org/IronLang/iron)
 
+[![Join the chat at https://gitter.im/IronLang/iron](https://badges.gitter.im/IronLang/iron.svg)](https://gitter.im/IronLang/iron?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 > **NOTE:** Iron is under active development, not production-ready in any sense. If you try to download this in an attempt to write software, you're gonna have a bad time. For more information, see the Progress section below.
 
 **Iron** (abbreviated **Fe**) is a general-purpose programming language, on which development started in 2016.
