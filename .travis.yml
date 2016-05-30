@@ -1,10 +1,12 @@
 language: cpp
-
 compiler:
-  - clang++
   - g++
-
-script:
+  - clang++
+before_script:
   - mkdir build
   - cd build
-  - cmake .. && make
+  - cmake ..
+script:
+  - make
+  - cd ..
+  - ./iron
